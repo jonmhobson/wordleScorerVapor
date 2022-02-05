@@ -23,23 +23,23 @@ struct User {
 
     var results: [(String, String)] = []
 
-    init(_ initString: String) {
-
-        let lines = initString.split(separator: "\n")
-
-        let name = "\(lines.first!)"
-        let guesses = "\(lines.last!)"
-
-        self.init(name: name, lines.dropFirst().dropLast().joined(separator: "\n"), guesses)
-    }
-
-    init(name: String, _ resultString: String, _ guessString: String) {
+    init?(name: String, _ resultString: String, _ guessString: String) {
         self.name = name
         self.resultString = resultString
         self.guessString = guessString.lowercased()
 
         let resultLines = self.resultString.split(separator: "\n")
         let guessLines = self.guessString.split(separator: ",").map { $0.trimmingCharacters(in: .whitespaces) }
+
+        for guessLine in guessLines {
+            if guessLine.count != 5 {
+                return nil
+            }
+        }
+
+        if resultLines.count != guessLines.count {
+            return nil
+        }
 
         for i in 0..<resultLines.count {
             results.append( ("\(resultLines[i])", "\(guessLines[i])") )
@@ -139,6 +139,11 @@ struct User {
             }
 
             let postFilterCount = possibleWords.count
+
+            if postFilterCount == 0 {
+                resultString += "HELP ME I DIED. Please report this error.\n"
+                return (0, resultString)
+            }
 
             let reduction = preFilterCount / postFilterCount
 

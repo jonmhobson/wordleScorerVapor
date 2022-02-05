@@ -4,17 +4,7 @@ import Leaf
 
 func routes(_ app: Application) throws {
     app.get { req -> EventLoopFuture<View> in
-        struct Score: Content {
-            var name: String
-            var result: String
-            var guesses: String
-        }
-
-        if let score = try? req.query.decode(Score.self) {
-            return req.view.render("footer")
-        } else {
-            return req.view.render("index")
-        }
+        return req.view.render("index")
     }
 
     app.get("answer") { req -> EventLoopFuture<View> in
@@ -29,7 +19,9 @@ func routes(_ app: Application) throws {
 
         let resultParsed = score.result.filter { char in allowedResultChars.contains(char) }
 
-        let user = User(name: score.name, resultParsed.chunked(into: 5).joined(separator: "\n"), score.guesses)
+        guard let user = User(name: score.name, resultParsed.chunked(into: 5).joined(separator: "\n"), score.guesses) else {
+            return req.view.render("error")
+        }
 
         return req.fileio.collectFile(at: "Resources/Public/wordle-answers-alphabetical.txt").flatMap { text in
             var answers = text
@@ -42,7 +34,7 @@ func routes(_ app: Application) throws {
                 answerString.split(separator: "\n").map { "\($0)" } +
                 guessesString.split(separator: "\n").map { "\($0)" }
 
-                let (score, scoreString) = user.score(words: words)
+                let (_, scoreString) = user.score(words: words)
 
                 let scoreStringHTML = scoreString.components(separatedBy: "\n")
 
