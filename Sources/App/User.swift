@@ -52,7 +52,7 @@ struct User {
         }
     }
 
-    fileprivate func handleReduction(_ reduction: Int, _ isGoodGuess: Bool) -> String {
+    fileprivate func handleReduction(_ reduction: Int) -> String {
         var retString = ""
 
         switch reduction {
@@ -68,10 +68,6 @@ struct User {
             retString += "Reduction: \(reduction)x - Rank S INCREDIBLE!\n"
         default:
             break
-        }
-
-        if !isGoodGuess {
-            retString += "[b]*** Guess is not in answer list. Half points. ***[/b]\n"
         }
 
         return retString
@@ -111,7 +107,7 @@ struct User {
                 }
             }
 
-            let isGoodGuess = possibleAnswers.contains(word)
+//            let isGoodGuess = possibleAnswers.contains(word)
 
             let preFilterCount = possibleAnswers.count + possibleGuesses.count
 
@@ -183,13 +179,9 @@ struct User {
             let probability = NSString(format: "%.2f", 100.0 / Double(postFilterCount))
 
             if result == "🟩🟩🟩🟩🟩" {
-                resultString += handleReduction(reduction, isGoodGuess)
+                resultString += handleReduction(reduction)
 
-                if isGoodGuess {
-                    score += reduction
-                } else {
-                    score += reduction / 2
-                }
+                score += reduction
 
                 let base = (6 - turn) * 100
                 score += base
@@ -203,13 +195,9 @@ struct User {
             } else {
                 resultString += "\(result) Guess #\(turn) - [spoiler]\(word)[/spoiler]\n"
 
-                resultString += handleReduction(reduction, isGoodGuess)
+                resultString += handleReduction(reduction)
 
-                if isGoodGuess {
-                    score += reduction
-                } else {
-                    score += reduction / 2
-                }
+                score += reduction
 
                 if postFilterCount == 1 {
                     resultString += "The answer has to be [spoiler]\(possibleAnswers.joined(separator: ", "))[/spoiler]\n"
