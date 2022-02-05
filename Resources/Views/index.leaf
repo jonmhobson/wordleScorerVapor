@@ -53,16 +53,7 @@
 
 <form class="needs-validation" action="/answer" action="#" method="GET" target="_blank">
 
-<div class="col-12">
-<label for="firstName" class="form-label">Username</label>
-<input type="text" class="form-control" name="name" placeholder="" value="Wordleperson" required>
-<div class="invalid-feedback">
-Valid first name is required.
-</div>
-</div>
-<br>
-
-Paste your own wordle results here:<br>
+Paste your wordle results here:<br>
 <code>
 <textarea class="form-control" rows="10" name="result" required>
 Wordle 231 4/6
@@ -71,7 +62,6 @@ Wordle 231 4/6
 ⬛⬛🟩🟨⬛
 ⬛🟩🟩🟨🟩
 🟩🟩🟩🟩🟩
-
 </textarea>
 </code>
 

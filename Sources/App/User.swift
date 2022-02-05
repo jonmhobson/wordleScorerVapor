@@ -79,7 +79,7 @@ struct User {
 
     func score(words: [String]) -> (Int, String) {
         var resultString = ""
-        resultString += "=========== \(name) ===========\n"
+//        resultString += "=========== \(name) ===========\n"
 
         var score = 0
 
@@ -172,9 +172,9 @@ struct User {
                     score = -500
                 }
 
-                resultString += "#\(turn): 🟩🟩🟩🟩🟩 \(score) points\n"
+                resultString += "Guess #\(turn): 🟩🟩🟩🟩🟩\n"
             } else {
-                resultString += "#\(turn): \(result) [spoiler]\(word)[/spoiler]\n"
+                resultString += "Guess #\(turn): \(result) [spoiler]\(word)[/spoiler]\n"
 
                 resultString += handleReduction(reduction, isGoodGuess)
 
@@ -206,8 +206,6 @@ struct User {
 
             turn += 1
         }
-
-        resultString += "==================================\n"
 
         return (score, resultString)
     }

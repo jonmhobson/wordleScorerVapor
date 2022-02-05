@@ -46,6 +46,8 @@
 #for(str in text):
     #(str)<br>
 #endfor
+
+https://wordleanalyzer.herokuapp.com
 </code>
 </p>
 </main>
