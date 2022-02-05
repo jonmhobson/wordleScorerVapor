@@ -29,15 +29,16 @@ func routes(_ app: Application) throws {
                 var guess = guessText
                 let guessesString = guess.readString(length: guess.readableBytes)!
 
-                let words: [String] =
-                answerString.split(separator: "\n").map { "\($0)" } +
+                let answers: [String] =
+                answerString.split(separator: "\n").map { "\($0)" }
+                let guesses: [String] =
                 guessesString.split(separator: "\n").map { "\($0)" }
 
-                let (points, scoreString) = user.score(words: words)
+                let (points, scoreString) = user.score(answers: answers, guesses: guesses)
 
                 let scoreStringHTML =
                 score.result.components(separatedBy: "\n") +
-                ["\(points) Points", ""] +
+                ["Score - \(points) Points", ""] +
                 scoreString.components(separatedBy: "\n")
 
                 return req.view.render("home", ["text": scoreStringHTML])

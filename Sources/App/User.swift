@@ -71,19 +71,19 @@ struct User {
         }
 
         if !isGoodGuess {
-            retString += "[b]*** Easy Mode Penalty. Half points. ***[/b]\n"
+            retString += "[b]*** Guess is not in answer list. Half points. ***[/b]\n"
         }
 
         return retString
     }
 
-    func score(words: [String]) -> (Int, String) {
+    func score(answers: [String], guesses: [String]) -> (Int, String) {
         var resultString = ""
-//        resultString += "=========== \(name) ===========\n"
 
         var score = 0
 
-        var possibleWords = words.sorted()
+        var possibleAnswers = answers.sorted()
+        var possibleGuesses = guesses.sorted()
         var mustNotContain = Set<String>()
         var yellowSquares: [String: [Int]] = [:]
         var greenSquares: [String: Int] = [:]
@@ -111,12 +111,11 @@ struct User {
                 }
             }
 
-            let isGoodGuess = possibleWords.contains(word)
+            let isGoodGuess = possibleAnswers.contains(word)
 
-            let preFilterCount = possibleWords.count
+            let preFilterCount = possibleAnswers.count + possibleGuesses.count
 
-            possibleWords = possibleWords.filter {
-
+            possibleAnswers = possibleAnswers.filter {
                 for mustNotContain in mustNotContain {
                     if $0.contains(mustNotContain) {
                         return false
@@ -144,7 +143,35 @@ struct User {
                 return true
             }
 
-            let postFilterCount = possibleWords.count
+            possibleGuesses = possibleGuesses.filter {
+                for mustNotContain in mustNotContain {
+                    if $0.contains(mustNotContain) {
+                        return false
+                    }
+                }
+
+                for (letter, indices) in yellowSquares {
+                    for index in indices {
+                        if $0[index] == letter {
+                            return false
+                        }
+                    }
+
+                    if !$0.contains(letter) {
+                        return false
+                    }
+                }
+
+                for (letter, index) in greenSquares {
+                    if $0[index] != letter {
+                        return false
+                    }
+                }
+
+                return true
+            }
+
+            let postFilterCount = possibleAnswers.count + possibleGuesses.count
 
             if postFilterCount == 0 {
                 resultString += "HELP ME I DIED. Please report this error.\n"
@@ -153,7 +180,7 @@ struct User {
 
             let reduction = preFilterCount / postFilterCount
 
-            let probability = NSString(format: "%.2f", 100.0 / Double(possibleWords.count))
+            let probability = NSString(format: "%.2f", 100.0 / Double(postFilterCount))
 
             if result == "🟩🟩🟩🟩🟩" {
                 resultString += handleReduction(reduction, isGoodGuess)
@@ -172,9 +199,9 @@ struct User {
                     score = -500
                 }
 
-                resultString += "Guess #\(turn): 🟩🟩🟩🟩🟩\n"
+                resultString += "🟩🟩🟩🟩🟩 Guess #\(turn) - Correct!\n"
             } else {
-                resultString += "Guess #\(turn): \(result) [spoiler]\(word)[/spoiler]\n"
+                resultString += "\(result) Guess #\(turn) - [spoiler]\(word)[/spoiler]\n"
 
                 resultString += handleReduction(reduction, isGoodGuess)
 
@@ -184,15 +211,17 @@ struct User {
                     score += reduction / 2
                 }
 
-                if possibleWords.count == 1 {
-                    resultString += "The answer has to be [spoiler]\(possibleWords.joined(separator: ", "))[/spoiler]\n"
-                } else if possibleWords.count < 50 {
-                    resultString += "\(possibleWords.count) possibilities: [spoiler]\(possibleWords.joined(separator: ", "))[/spoiler]\n"
+                if postFilterCount == 1 {
+                    resultString += "The answer has to be [spoiler]\(possibleAnswers.joined(separator: ", "))[/spoiler]\n"
+                } else if postFilterCount < 50 {
+                    resultString += "\(possibleAnswers.count) good guesses: [spoiler]\(possibleAnswers.joined(separator: ", "))[/spoiler]\n"
+                    resultString += "\(possibleGuesses.count) bad guesses: [spoiler]\(possibleGuesses.joined(separator: ", "))[/spoiler]\n"
                 } else {
-                    resultString += "\(possibleWords.count) possible answers remain.\n"
+                    resultString += "\(possibleAnswers.count) good guesses remain.\n"
+                    resultString += "\(possibleGuesses.count) bad guesses remain.\n"
                 }
 
-                if possibleWords.count > 1 {
+                if postFilterCount > 1 {
                     resultString += "\(probability)% chance to guess on next turn\n"
                 }
 
