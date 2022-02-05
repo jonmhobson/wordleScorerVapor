@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<form action="/answer" action="#" method="GET" target="_blank">
+
+        Name: <input type="text" name="name"
+                            value="Wordleperson">
+
+        <br><br>
+
+        Paste your own wordle results here:<br>
+        <textarea cols="40" rows="10" name="result">
+Wordle 231 4/6
+
+⬛⬛⬛⬛⬛
+⬛⬛🟩🟨⬛
+⬛🟩🟩🟨🟩
+🟩🟩🟩🟩🟩
+        </textarea>
+
+        <br><br>
+        Write your guesses here separated by a comma:<br><input type="text" name="guesses" value="penis, quoth, bloat, aloft">
+        <br><br>
+
+        <input type="submit" value="Submit">
+
+    </form>
+
+</html>
