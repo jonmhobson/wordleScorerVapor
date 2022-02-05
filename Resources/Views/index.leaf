@@ -1,28 +1,102 @@
 <!doctype html>
 <html lang="en">
-<form action="/answer" action="#" method="GET" target="_blank">
+<head>
+<!-- Required meta tags -->
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-        Name: <input type="text" name="name"
-                            value="Wordleperson">
+<!-- Bootstrap CSS -->
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
 
-        <br><br>
+    <!-- Favicons -->
+<link rel="apple-touch-icon" href="/docs/5.1/assets/img/favicons/apple-touch-icon.png" sizes="180x180">
+<link rel="icon" href="/docs/5.1/assets/img/favicons/favicon-32x32.png" sizes="32x32" type="image/png">
+<link rel="icon" href="/docs/5.1/assets/img/favicons/favicon-16x16.png" sizes="16x16" type="image/png">
+<link rel="manifest" href="/docs/5.1/assets/img/favicons/manifest.json">
+<link rel="mask-icon" href="/docs/5.1/assets/img/favicons/safari-pinned-tab.svg" color="#7952b3">
+<link rel="icon" href="/docs/5.1/assets/img/favicons/favicon.ico">
+<meta name="theme-color" content="#111111">
 
-        Paste your own wordle results here:<br>
-        <textarea cols="40" rows="10" name="result">
+<style>
+      .bd-placeholder-img {
+        font-size: 1.125rem;
+        text-anchor: middle;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        user-select: none;
+      }
+
+      @media (min-width: 768px) {
+        .bd-placeholder-img-lg {
+          font-size: 3.5rem;
+        }
+      }
+    </style>
+
+<link href="form-validation.css" rel="stylesheet">
+
+<title>Wordle Analyzer</title>
+</head>
+<body class="bg-light">
+
+<div class="container">
+<main>
+
+<div class="py-5 text-center">
+<h2>Wordle Analyzer</h2>
+<p class="lead">Find out how much each of your guesses actually reduced the pool of potential words.</p>
+</div>
+
+<div class="row g-5">
+
+<div class="col-md-7 col-lg-8">
+
+<form class="needs-validation" action="/answer" action="#" method="GET" target="_blank">
+
+<div class="col-12">
+<label for="firstName" class="form-label">Username</label>
+<input type="text" class="form-control" name="name" placeholder="" value="Wordleperson" required>
+<div class="invalid-feedback">
+Valid first name is required.
+</div>
+</div>
+<br>
+
+Paste your own wordle results here:<br>
+<code>
+<textarea class="form-control" rows="10" name="result" required>
 Wordle 231 4/6
 
 ⬛⬛⬛⬛⬛
 ⬛⬛🟩🟨⬛
 ⬛🟩🟩🟨🟩
 🟩🟩🟩🟩🟩
-        </textarea>
 
-        <br><br>
-        Write your guesses here separated by a comma:<br><input type="text" name="guesses" value="penis, quoth, bloat, aloft">
-        <br><br>
+</textarea>
+</code>
 
-        <input type="submit" value="Submit">
+<br>
 
-    </form>
+<div class="col-sm-12">
+<label for="firstName" class="form-label">Write your guesses here separated by a comma:</label>
+<input type="text" class="form-control" name="guesses" placeholder="" value="penis, quoth, bloat, aloft" required>
+<div class="invalid-feedback">
+List of guesses is required.
+</div>
+</div>
+<br>
 
+<input type="submit" value="Submit">
+
+</form>
+
+</div>
+</div>
+
+</main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+</body>
 </html>

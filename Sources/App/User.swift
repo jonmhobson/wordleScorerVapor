@@ -37,6 +37,12 @@ struct User {
             }
         }
 
+        for result in resultLines {
+            if result.count != 5 {
+                return nil
+            }
+        }
+
         if resultLines.count != guessLines.count {
             return nil
         }
