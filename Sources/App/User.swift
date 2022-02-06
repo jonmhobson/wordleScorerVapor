@@ -55,17 +55,23 @@ struct User {
     fileprivate func handleReduction(_ reduction: Int) -> String {
         var retString = ""
 
+        if reduction == 1 {
+            retString += "\n"
+        } else {
+            retString += " +\(reduction) points\n"
+        }
+
         switch reduction {
         case 2..<10:
-            retString += "Reduction: \(reduction)x - Rank D\n"
+            retString += "\(reduction)x reduction in possible solutions - Rank D\n"
         case 10..<50:
-            retString += "Reduction: \(reduction)x - Rank C\n"
+            retString += "\(reduction)x reduction in possible solutions - Rank C\n"
         case 50..<100:
-            retString += "Reduction: \(reduction)x - Rank B\n"
+            retString += "\(reduction)x reduction in possible solutions - Rank B\n"
         case 100..<150:
-            retString += "Reduction: \(reduction)x - Rank A GREAT!\n"
+            retString += "\(reduction)x reduction in possible solutions - Rank A GREAT!\n"
         case 150..<Int.max:
-            retString += "Reduction: \(reduction)x - Rank S INCREDIBLE!\n"
+            retString += "\(reduction)x reduction in possible solutions - Rank S INCREDIBLE!\n"
         default:
             break
         }
@@ -106,8 +112,6 @@ struct User {
                 default: break
                 }
             }
-
-//            let isGoodGuess = possibleAnswers.contains(word)
 
             let preFilterCount = possibleAnswers.count + possibleGuesses.count
 
@@ -176,14 +180,19 @@ struct User {
 
             let reduction = preFilterCount / postFilterCount
 
-            let probability = NSString(format: "%.2f", 100.0 / Double(postFilterCount))
+//            let probability = NSString(format: "%.2f", 100.0 / Double(postFilterCount))
 
             if result == "🟩🟩🟩🟩🟩" {
+                let base = (6 - turn) * 100
+
+                resultString += "🟩🟩🟩🟩🟩 Guess #\(turn)"
+
                 resultString += handleReduction(reduction)
 
                 score += reduction
 
-                let base = (6 - turn) * 100
+                resultString += "+\(base) points for winning in \(turn)/6 turns\n"
+
                 score += base
 
                 if turn == 1 {
@@ -191,9 +200,9 @@ struct User {
                     score = -500
                 }
 
-                resultString += "🟩🟩🟩🟩🟩 Guess #\(turn) - Correct!\n"
+                resultString += "\nTotal Score: \(score)\n"
             } else {
-                resultString += "\(result) Guess #\(turn) - [spoiler]\(word)[/spoiler]\n"
+                resultString += "\(result) Guess #\(turn) [spoiler]\(word)[/spoiler]"
 
                 resultString += handleReduction(reduction)
 
@@ -202,18 +211,14 @@ struct User {
                 if postFilterCount == 1 {
                     resultString += "The answer has to be [spoiler]\(possibleAnswers.joined(separator: ", "))[/spoiler]\n"
                 } else if postFilterCount < 50 {
-                    resultString += "\(possibleAnswers.count) good guesses: [spoiler]\(possibleAnswers.joined(separator: ", "))[/spoiler]\n"
-                    resultString += "\(possibleGuesses.count) bad guesses: [spoiler]\(possibleGuesses.joined(separator: ", "))[/spoiler]\n"
+                    resultString += "\(possibleAnswers.count) common words remain: [spoiler]\(possibleAnswers.joined(separator: ", "))[/spoiler]\n"
+                    resultString += "\(possibleGuesses.count) unusual words remain: [spoiler]\(possibleGuesses.joined(separator: ", "))[/spoiler]\n"
                 } else {
-                    resultString += "\(possibleAnswers.count) good guesses remain.\n"
-                    resultString += "\(possibleGuesses.count) bad guesses remain.\n"
+                    resultString += "\(possibleAnswers.count) common words, "
+                    resultString += "\(possibleGuesses.count) unusual words remain.\n"
                 }
 
-                if postFilterCount > 1 {
-                    resultString += "\(probability)% chance to guess on next turn\n"
-                }
-
-                resultString += "--------------------------------\n"
+                resultString += "\n"
 
                 if turn == 6 {
                     score -= 100

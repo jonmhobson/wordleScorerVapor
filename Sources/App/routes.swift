@@ -38,7 +38,7 @@ func routes(_ app: Application) throws {
 
                 let scoreStringHTML =
                 score.result.components(separatedBy: "\n") +
-                ["Score - \(points) Points", ""] +
+                ["\n"] +
                 scoreString.components(separatedBy: "\n")
 
                 return req.view.render("home", ["text": scoreStringHTML])
