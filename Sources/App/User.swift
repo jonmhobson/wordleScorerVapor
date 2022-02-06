@@ -56,7 +56,7 @@ struct User {
         var retString = ""
 
         if reduction == 1 {
-            retString += "\n"
+            retString += " +1 point\n"
         } else {
             retString += " +\(reduction) points\n"
         }
@@ -73,7 +73,7 @@ struct User {
         case 150..<Int.max:
             retString += "\(reduction)x reduction in possible solutions - Rank S INCREDIBLE!\n"
         default:
-            break
+            retString += "<2x reduction in possible solutions - Rank E\n"
         }
 
         return retString
@@ -212,7 +212,10 @@ struct User {
                     resultString += "The answer has to be [spoiler]\(possibleAnswers.joined(separator: ", "))[/spoiler]\n"
                 } else if postFilterCount < 50 {
                     resultString += "\(possibleAnswers.count) common words remain: [spoiler]\(possibleAnswers.joined(separator: ", "))[/spoiler]\n"
-                    resultString += "\(possibleGuesses.count) unusual words remain: [spoiler]\(possibleGuesses.joined(separator: ", "))[/spoiler]\n"
+
+                    if possibleGuesses.count > 0 {
+                        resultString += "\(possibleGuesses.count) unusual words remain: [spoiler]\(possibleGuesses.joined(separator: ", "))[/spoiler]\n"
+                    }
                 } else {
                     resultString += "\(possibleAnswers.count) common words, "
                     resultString += "\(possibleGuesses.count) unusual words remain.\n"
